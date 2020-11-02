@@ -11,7 +11,7 @@ const { isLoggedIn } = require('../helpers/auth-helper'); // middleware to check
 router.post('/signup', (req, res) => {
     const {username, email, password } = req.body;
     console.log(username, email, password);
- 
+    /*
     if (!username || !email || !password) {
         res.status(500)
           .json({
@@ -37,7 +37,7 @@ router.post('/signup', (req, res) => {
           });
         return;  
     }
-
+    */
     bcrypt.genSalt(12)
       .then((salt) => {
         console.log('Salt: ', salt);
@@ -73,6 +73,7 @@ router.post('/signup', (req, res) => {
  
 router.post('/signin', (req, res) => {
     const {email, password } = req.body;
+    /*
     if ( !email || !password) {
         res.status(500).json({
             error: 'Please enter Username. email and password',
@@ -86,7 +87,7 @@ router.post('/signin', (req, res) => {
         })
         return;  
     }
-  
+    */
     // Find if the user exists in the database 
     UserModel.findOne({email})
       .then((userData) => {
@@ -96,10 +97,10 @@ router.post('/signin', (req, res) => {
                 //if it matches
                 if (doesItMatch) {
                   // req.session is the special object that is available to you
-                  userData.passwordHash = "***";
-                  req.session.loggedInUser = userData;
+                  user.passwordHash = "***";
+                  req.session.loggedInUser = user;
                   console.log('Signin', req.session)
-                  res.status(200).json(userData)
+                  res.status(200).json(user)
                 }
                 //if passwords do not match
                 else {
@@ -109,9 +110,10 @@ router.post('/signin', (req, res) => {
                   return; 
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 res.status(500).json({
                     error: 'Email format not correct',
+                    message: err,
                 })
               return; 
             });

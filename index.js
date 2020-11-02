@@ -36,7 +36,7 @@ app.use(logger('dev'));
 const cors = require('cors')
 app.use(cors({
   credentials: true, 
-  origin: ['http://localhost:3000']
+  origin: ['http://127.0.0.1:3000']
 }))
 
 const cookieParser = require('cookie-parser');
@@ -60,6 +60,11 @@ app.use('/api', authRoutes);
 
 const fileUploads = require('./routes/file-upload.routes')
 app.use('/api', fileUploads);
+
+const stripeRoutes = require('./routes/stripe.routes')
+app.use('/api', stripeRoutes)
+
+
 
 
 app.use((req, res, next) => {
